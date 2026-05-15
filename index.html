@@ -1240,13 +1240,153 @@ body {
   .indices-grid { grid-template-columns: repeat(3, 1fr); }
 }
 
+@media (max-width: 1100px) {
+  .dash-grid { grid-template-columns: repeat(3, 1fr); }
+  .indices-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* ═══════════════════════════════════════════
+   MOBILE — Diseño completo para celular
+   ═══════════════════════════════════════════ */
 @media (max-width: 768px) {
-  .sidebar { width: 60px; }
-  .sidebar .logo-title, .sidebar .nav-item span, .sidebar .nav-section, .sidebar .logo-year, .sidebar .badge { display: none; }
-  .main { margin-left: 60px; }
-  .dash-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* Ocultar sidebar desktop */
+  .sidebar { display: none !important; }
+
+  /* Main ocupa toda la pantalla */
+  .main {
+    margin-left: 0 !important;
+    padding-bottom: 70px; /* espacio para bottom nav */
+  }
+
+  /* Topbar más compacta */
+  .topbar { padding: 0 14px; }
+  .topbar-title { font-size: 16px; }
+
+  /* Grids a 1 columna */
+  .dash-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .indices-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .momentum-grid { grid-template-columns: 1fr; }
   .form-row, .form-row-3 { grid-template-columns: 1fr; }
   .dash-row, .dash-row-3 { grid-template-columns: 1fr; }
+
+  /* Secciones con padding reducido */
+  .section { padding: 14px; }
+  .section-header { flex-wrap: wrap; gap: 8px; }
+
+  /* Cards */
+  .card { padding: 12px; }
+  .league-card { padding: 14px; }
+
+  /* Candidatos */
+  .candidato-item { padding: 12px; }
+  .candidato-top { flex-wrap: wrap; gap: 8px; }
+  .candidato-actions { flex-wrap: wrap; gap: 6px; }
+  .candidato-actions .btn { font-size: 11px; padding: 6px 10px; }
+
+  /* Tabs de análisis */
+  .modelo-tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  /* Panel de momios */
+  .momios-grid { grid-template-columns: repeat(2, 1fr) !important; }
+
+  /* Historial */
+  .pick-card { padding: 12px; }
+  .pick-card-header { flex-wrap: wrap; gap: 6px; }
+
+  /* Análisis guardados */
+  .analisis-card { padding: 12px; }
+
+  /* Modal a pantalla completa */
+  .modal-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    border-radius: 16px 16px 0 0 !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .modal { align-items: flex-end !important; }
+
+  /* Parlay zone */
+  #parlayZone { padding: 12px; }
+  .parlay-picks { gap: 6px; }
+
+  /* Botones de sección */
+  .btn-sm { padding: 6px 10px; font-size: 11px; }
+
+  /* Dashboard stat cards más compactas */
+  .stat-value { font-size: 22px !important; }
+
+  /* Texto más legible */
+  .candidato-razon { font-size: 12px; line-height: 1.5; }
+}
+
+/* ═══════════════════════════════════════════
+   BOTTOM NAV — Navegación móvil
+   ═══════════════════════════════════════════ */
+#mobileNav {
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 60px;
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  z-index: 200;
+  padding-bottom: var(--sab);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+#mobileNav .mob-nav-inner {
+  display: flex;
+  align-items: stretch;
+  height: 100%;
+  min-width: max-content;
+  padding: 0 4px;
+}
+
+.mob-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 6px 14px;
+  cursor: pointer;
+  color: var(--text3);
+  transition: color 0.15s;
+  white-space: nowrap;
+  min-width: 56px;
+  border: none;
+  background: none;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.mob-nav-item.active { color: var(--green); }
+.mob-nav-item .mob-icon { font-size: 20px; line-height: 1; }
+.mob-nav-item .mob-label { font-size: 9px; font-weight: 600; letter-spacing: 0.3px; }
+.mob-nav-item .mob-badge {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  background: var(--red);
+  color: #fff;
+  font-size: 8px;
+  font-weight: 700;
+  border-radius: 8px;
+  padding: 1px 4px;
+  min-width: 14px;
+  text-align: center;
+}
+.mob-nav-item { position: relative; }
+
+@media (max-width: 768px) {
+  #mobileNav { display: block; }
 }
 
 /* ─── ANIMACIONES ENTRADA ─── */
@@ -4998,10 +5138,10 @@ function clearAllRecordatorios() {
 function updateBadges() {
   document.getElementById('badge-candidatos').textContent = state.candidatos.length;
   document.getElementById('badge-analisis').textContent = state.analisis.length;
-  // Badge recordatorios en nav
   const badgeRec = document.getElementById('badge-recordatorios');
   if(badgeRec) badgeRec.textContent = state.recordatorios?.length||0;
   badgeRec && (badgeRec.style.display = (state.recordatorios?.length||0)>0?'block':'none');
+  updateMobBadges();
 }
 
 // Cargar imágenes del Compatipster desde file input
@@ -5082,8 +5222,61 @@ function init() {
   }, 500);
 }
 
+function setMobActive(el) {
+  document.querySelectorAll('.mob-nav-item').forEach(b => b.classList.remove('active'));
+  if(el) el.classList.add('active');
+}
+
+// Sync badge de candidatos en bottom nav
+function updateMobBadges() {
+  const n = state.candidatos?.length || 0;
+  const b = document.getElementById('mob-badge-candidatos');
+  if(b) { b.textContent = n; b.style.display = n > 0 ? 'block' : 'none'; }
+}
+
 init();
 </script>
+
+<!-- ═══════════════════════════════════════════════════
+     BOTTOM NAV MÓVIL
+     ═══════════════════════════════════════════════════ -->
+<nav id="mobileNav">
+  <div class="mob-nav-inner">
+    <button class="mob-nav-item active" onclick="showSection('dashboard');setMobActive(this)">
+      <span class="mob-icon">📊</span>
+      <span class="mob-label">Dashboard</span>
+    </button>
+    <button class="mob-nav-item" onclick="showSection('partidos');setMobActive(this)">
+      <span class="mob-icon">⚽</span>
+      <span class="mob-label">Partidos</span>
+    </button>
+    <button class="mob-nav-item" onclick="showSection('analisis-ia');setMobActive(this)">
+      <span class="mob-icon">🧠</span>
+      <span class="mob-label">Análisis</span>
+    </button>
+    <button class="mob-nav-item" onclick="showSection('candidatos');setMobActive(this)">
+      <span class="mob-icon">⭐</span>
+      <span class="mob-label">Candidatos</span>
+      <span class="mob-badge" id="mob-badge-candidatos" style="display:none"></span>
+    </button>
+    <button class="mob-nav-item" onclick="showSection('historial');setMobActive(this)">
+      <span class="mob-icon">📋</span>
+      <span class="mob-label">Historial</span>
+    </button>
+    <button class="mob-nav-item" onclick="showSection('momentum');setMobActive(this)">
+      <span class="mob-icon">🔥</span>
+      <span class="mob-label">Momentum</span>
+    </button>
+    <button class="mob-nav-item" onclick="showSection('indices');setMobActive(this)">
+      <span class="mob-icon">📈</span>
+      <span class="mob-label">Índices</span>
+    </button>
+    <button class="mob-nav-item" onclick="showSection('aprendizajes');setMobActive(this)">
+      <span class="mob-icon">🎓</span>
+      <span class="mob-label">Aprend.</span>
+    </button>
+  </div>
+</nav>
 
 <!-- ═══════════════════════════════════════════════════
      SERVICE WORKER — PWA instalable
