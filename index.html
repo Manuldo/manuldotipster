@@ -50,6 +50,13 @@
   --sal: env(safe-area-inset-left, 0px);
   --sar: env(safe-area-inset-right, 0px);
 }
+
+/* Prevenir overflow horizontal global en móvil */
+@media (max-width: 768px) {
+  html, body { overflow-x: hidden; max-width: 100vw; }
+  * { box-sizing: border-box; }
+  .main { overflow-x: hidden; }
+}
   --transition: all 0.2s cubic-bezier(0.4,0,0.2,1);
 }
 
@@ -1246,144 +1253,317 @@ body {
 }
 
 /* ═══════════════════════════════════════════
-   MOBILE — Diseño completo para celular
+   MOBILE — Estilo ESPN/SofaScore
    ═══════════════════════════════════════════ */
 @media (max-width: 768px) {
 
-  /* Ocultar sidebar desktop */
+  /* ── Layout base ── */
   .sidebar { display: none !important; }
+  .main { margin-left: 0 !important; padding-bottom: 80px; }
 
-  /* Main ocupa toda la pantalla */
-  .main {
-    margin-left: 0 !important;
-    padding-bottom: 70px; /* espacio para bottom nav */
+  /* ── Topbar limpia ── */
+  .topbar {
+    height: 56px;
+    padding: 0 16px;
+    background: #0a0a0f;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .topbar-date { display: none; }
+  .version-tag { display: none; }
+  .topbar-title {
+    font-size: 18px;
+    letter-spacing: 2px;
   }
 
-  /* Topbar más compacta */
-  .topbar { padding: 0 14px; }
-  .topbar-title { font-size: 16px; }
+  /* ── Secciones ── */
+  .section { padding: 0; }
+  .section-header {
+    padding: 14px 16px 10px;
+    flex-wrap: wrap;
+    gap: 8px;
+    background: #0a0a0f;
+    position: sticky;
+    top: 56px;
+    z-index: 10;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .section-title { font-size: 13px; letter-spacing: 2px; }
 
-  /* Grids a 1 columna */
-  .dash-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-  .indices-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-  .momentum-grid { grid-template-columns: 1fr; }
-  .form-row, .form-row-3 { grid-template-columns: 1fr; }
-  .dash-row, .dash-row-3 { grid-template-columns: 1fr; }
+  /* ── Match cards estilo ESPN ── */
+  .match-row {
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 14px 16px !important;
+    border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    background: var(--bg2) !important;
+    gap: 10px !important;
+  }
+  .match-row:active { background: var(--bg3) !important; }
 
-  /* Secciones con padding reducido */
-  .section { padding: 14px; }
-  .section-header { flex-wrap: wrap; gap: 8px; }
+  /* Liga en top de la card */
+  .match-league {
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    letter-spacing: 1.5px !important;
+    text-transform: uppercase !important;
+    color: var(--text3) !important;
+    margin: 0 !important;
+  }
 
-  /* Cards */
-  .card { padding: 12px; }
-  .league-card { padding: 14px; }
+  /* Equipos y marcador — fila central grande */
+  .match-teams {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
 
-  /* Candidatos */
-  .candidato-item { padding: 12px; }
-  .candidato-top { flex-wrap: wrap; gap: 8px; }
-  .candidato-actions { flex-wrap: wrap; gap: 6px; }
-  .candidato-actions .btn { font-size: 11px; padding: 6px 10px; }
+  /* Botones de la card */
+  .btn-analyze-match {
+    width: 100% !important;
+    padding: 10px !important;
+    font-size: 13px !important;
+    border-radius: 8px !important;
+    text-align: center !important;
+    background: rgba(0,230,118,0.1) !important;
+    border: 1px solid rgba(0,230,118,0.25) !important;
+    color: var(--green) !important;
+    font-weight: 600 !important;
+  }
 
-  /* Tabs de análisis */
-  .modelo-tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  /* League tabs scroll horizontal */
+  #leagueTabs {
+    padding: 10px 16px !important;
+    gap: 8px !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+  }
+  #leagueTabs::-webkit-scrollbar { display: none; }
+  .match-tab {
+    font-size: 12px !important;
+    padding: 6px 14px !important;
+    white-space: nowrap !important;
+    border-radius: 20px !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* ── Dashboard ── */
+  .dash-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px;
+    padding: 14px 16px;
+  }
+  .stat-card { padding: 14px 12px; border-radius: 12px; }
+  .stat-value { font-size: 24px !important; }
+  .stat-label { font-size: 10px; }
+  .dash-row, .dash-row-3 {
+    grid-template-columns: 1fr !important;
+    padding: 0 16px 14px;
+    gap: 10px;
+  }
+  .card { border-radius: 12px; padding: 14px; }
+  .card-title { font-size: 12px; }
+
+  /* ── Análisis IA ── */
+  .modelo-tabs {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    flex-wrap: nowrap !important;
+    padding: 10px 16px !important;
+    gap: 8px !important;
+    scrollbar-width: none !important;
+  }
+  .modelo-tabs::-webkit-scrollbar { display: none; }
+  .modelo-tab { white-space: nowrap; flex-shrink: 0; }
 
   /* Panel de momios */
-  .momios-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .momios-panel, [class*="momios"] {
+    padding: 12px 16px !important;
+  }
 
-  /* Historial */
-  .pick-card { padding: 12px; }
+  /* Formulario análisis */
+  .form-row, .form-row-3 {
+    grid-template-columns: 1fr !important;
+    padding: 0 16px;
+    gap: 10px;
+  }
+  .form-group { margin-bottom: 0; }
+  .form-label { font-size: 11px; }
+
+  /* ── Candidatos ── */
+  .candidato-item {
+    margin: 0 !important;
+    border-radius: 0 !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+    padding: 14px 16px !important;
+  }
+  .candidato-top { flex-wrap: nowrap; align-items: flex-start; gap: 10px; }
+  .candidato-actions {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    margin-top: 10px !important;
+  }
+  .candidato-actions .btn {
+    flex: 1 !important;
+    min-width: 0 !important;
+    text-align: center !important;
+    font-size: 12px !important;
+    padding: 8px 6px !important;
+  }
+  .candidato-razon { font-size: 12px; line-height: 1.5; margin: 8px 0 0; }
+  .stake-input { width: 70px !important; }
+
+  /* ── Historial ── */
+  .pick-card {
+    margin: 0 !important;
+    border-radius: 0 !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+    padding: 14px 16px !important;
+  }
   .pick-card-header { flex-wrap: wrap; gap: 6px; }
 
-  /* Análisis guardados */
-  .analisis-card { padding: 12px; }
+  /* ── Índices ── */
+  .indices-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    padding: 14px 16px !important;
+    gap: 10px !important;
+  }
 
-  /* Modal a pantalla completa */
+  /* ── Momentum ── */
+  .momentum-grid {
+    grid-template-columns: 1fr !important;
+    padding: 14px 16px !important;
+    gap: 12px !important;
+  }
+  .league-card { border-radius: 12px; }
+
+  /* ── Modal → bottom sheet ── */
+  .modal { align-items: flex-end !important; padding: 0 !important; }
   .modal-content {
     width: 100% !important;
     max-width: 100% !important;
     margin: 0 !important;
-    border-radius: 16px 16px 0 0 !important;
-    position: fixed !important;
-    bottom: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    max-height: 90vh;
-    overflow-y: auto;
+    border-radius: 20px 20px 0 0 !important;
+    max-height: 88vh !important;
+    overflow-y: auto !important;
+    padding-bottom: calc(20px + var(--sab)) !important;
   }
-  .modal { align-items: flex-end !important; }
 
-  /* Parlay zone */
-  #parlayZone { padding: 12px; }
-  .parlay-picks { gap: 6px; }
+  /* ── Parlay zone ── */
+  #parlayZone {
+    margin: 10px 16px !important;
+    border-radius: 12px !important;
+  }
 
-  /* Botones de sección */
-  .btn-sm { padding: 6px 10px; font-size: 11px; }
+  /* ── Tipografía general ── */
+  body { font-size: 14px; }
+  .section-content { padding: 0; }
 
-  /* Dashboard stat cards más compactas */
-  .stat-value { font-size: 22px !important; }
+  /* ── Historial — ocultar tabla, usar cards ── */
+  .historial-table { display: none !important; }
 
-  /* Texto más legible */
-  .candidato-razon { font-size: 12px; line-height: 1.5; }
+  /* ── Grids de análisis guardados ── */
+  .analisis-card {
+    margin: 0 !important;
+    border-radius: 0 !important;
+    border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+    padding: 14px 16px !important;
+  }
+
+  /* Separadores de sección */
+  .divider { margin: 12px 16px; }
+
+  /* Empty states con padding */
+  .empty-state { padding: 40px 20px; }
 }
 
 /* ═══════════════════════════════════════════
-   BOTTOM NAV — Navegación móvil
+   BOTTOM NAV — Navegación móvil estilo app
    ═══════════════════════════════════════════ */
 #mobileNav {
   display: none;
   position: fixed;
   bottom: 0; left: 0; right: 0;
-  height: 60px;
-  background: var(--bg2);
-  border-top: 1px solid var(--border);
+  background: rgba(10,10,15,0.97);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255,255,255,0.08);
   z-index: 200;
   padding-bottom: var(--sab);
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
 }
 
 #mobileNav .mob-nav-inner {
   display: flex;
   align-items: stretch;
-  height: 100%;
-  min-width: max-content;
+  height: 64px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
   padding: 0 4px;
 }
+#mobileNav .mob-nav-inner::-webkit-scrollbar { display: none; }
 
 .mob-nav-item {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2px;
-  padding: 6px 14px;
+  gap: 3px;
+  padding: 8px 16px;
   cursor: pointer;
-  color: var(--text3);
-  transition: color 0.15s;
+  color: rgba(255,255,255,0.35);
+  transition: color 0.15s, transform 0.1s;
   white-space: nowrap;
-  min-width: 56px;
+  min-width: 60px;
   border: none;
   background: none;
   font-family: 'DM Sans', sans-serif;
+  flex-shrink: 0;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
 }
-
+.mob-nav-item:active { transform: scale(0.9); }
 .mob-nav-item.active { color: var(--green); }
-.mob-nav-item .mob-icon { font-size: 20px; line-height: 1; }
-.mob-nav-item .mob-label { font-size: 9px; font-weight: 600; letter-spacing: 0.3px; }
-.mob-nav-item .mob-badge {
+.mob-nav-item.active .mob-icon { filter: drop-shadow(0 0 6px var(--green)); }
+
+.mob-icon { font-size: 22px; line-height: 1; }
+.mob-label { font-size: 9px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+
+.mob-badge {
   position: absolute;
-  top: 4px;
-  right: 8px;
+  top: 6px;
+  right: 10px;
   background: var(--red);
   color: #fff;
   font-size: 8px;
-  font-weight: 700;
-  border-radius: 8px;
-  padding: 1px 4px;
-  min-width: 14px;
+  font-weight: 800;
+  border-radius: 10px;
+  padding: 1px 5px;
+  min-width: 16px;
   text-align: center;
+  border: 2px solid #0a0a0f;
 }
-.mob-nav-item { position: relative; }
+
+/* Línea indicador activo arriba */
+.mob-nav-item.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 2px;
+  background: var(--green);
+  border-radius: 0 0 2px 2px;
+}
 
 @media (max-width: 768px) {
   #mobileNav { display: block; }
@@ -2801,20 +2981,28 @@ function renderMatches() {
     // Recordatorio badge
     const hasReminder = state.recordatorios?.some(r=>String(r.matchId)===String(m.id));
 
-    return `<div class="match-row ${isFinal?'match-finished':''}" onclick="selectMatch('${m.id}')" style="${isFinal?'opacity:0.7':''}">
-      <div style="width:52px;flex-shrink:0">${timeHTML}</div>
-      <div class="match-teams" style="flex:1">
-        <div style="display:flex;align-items:center;gap:6px">
-          <span style="font-size:13px;font-weight:${hasScore?'600':'500'}">${m.home}</span>
-          ${scoreHTML}
-          <span style="font-size:13px;font-weight:${hasScore?'600':'500'}">${m.away}</span>
-        </div>
-        <div class="match-league" style="margin-top:2px">${m.leagueFlag||'⚽'} ${m.league}</div>
+    return `<div class="match-row ${isFinal?'match-finished':''}" onclick="selectMatch('${m.id}')" style="${isFinal?'opacity:0.65':''}">
+      <!-- Liga arriba (visible en móvil) -->
+      <div class="match-league" style="display:flex;align-items:center;gap:5px">
+        <span>${m.leagueFlag||'⚽'}</span><span>${m.league}</span>
       </div>
-      <div style="display:flex;gap:6px;align-items:center">
-        ${hasReminder ? `<span style="font-size:14px" title="Recordatorio activo">🔔</span>` : ''}
+      <!-- Fila central: equipo - marcador - equipo -->
+      <div class="match-teams">
+        <div style="flex:1;min-width:0">
+          <div style="font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${m.home}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:2px;flex-shrink:0;padding:0 10px">
+          ${timeHTML}
+          ${scoreHTML}
+        </div>
+        <div style="flex:1;min-width:0;text-align:right">
+          <div style="font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${m.away}</div>
+        </div>
+      </div>
+      <!-- Botones -->
+      <div style="display:flex;gap:8px;align-items:center">
         <button class="btn-analyze-match" onclick="event.stopPropagation();analyzeMatch('${m.id}')">🧠 Analizar</button>
-        <button onclick="event.stopPropagation();toggleRecordatorio('${m.id}','${(m.home+' vs '+m.away).replace(/'/g,"")}')" style="background:none;border:none;cursor:pointer;font-size:14px;padding:4px" title="${hasReminder?'Quitar recordatorio':'Agregar recordatorio'}">${hasReminder?'🔕':'🔔'}</button>
+        <button onclick="event.stopPropagation();toggleRecordatorio('${m.id}','${(m.home+' vs '+m.away).replace(/'/g,"")}','${m.time||''}')" style="background:none;border:1px solid rgba(255,255,255,0.1);border-radius:8px;cursor:pointer;font-size:16px;padding:8px 10px;flex-shrink:0" title="${hasReminder?'Quitar recordatorio':'Recordatorio'}">${hasReminder?'🔔':'🔕'}</button>
       </div>
     </div>`;
   }).join('') || `<div class="empty-state" style="padding:30px"><div class="empty-icon">⚽</div><div class="empty-title">Sin partidos en esta liga hoy</div></div>`;
@@ -4052,35 +4240,80 @@ function renderHistorial() {
   }).slice().reverse();
 
   const confColor = (c) => c>=85?'var(--green)':c>=75?'#69f0ae':c>=65?'var(--blue)':'var(--yellow)';
+  const isMobile = window.innerWidth <= 768;
 
   if(!picks.length) {
-    document.getElementById('historialBody').innerHTML = `<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--text3)">Sin picks</td></tr>`;
+    if(isMobile) {
+      // En móvil reemplazar la tabla con contenedor de cards
+      const wrap = document.getElementById('historialTable')?.parentElement;
+      if(wrap) wrap.innerHTML = `<div style="text-align:center;padding:60px 20px;color:var(--text3)">
+        <div style="font-size:40px;margin-bottom:12px">📋</div>
+        <div style="font-size:15px;font-weight:600">Sin picks registrados</div>
+        <div style="font-size:13px;margin-top:6px">Confirma candidatos para verlos aquí</div>
+      </div>`;
+    } else {
+      document.getElementById('historialBody').innerHTML = `<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--text3)">Sin picks</td></tr>`;
+    }
     return;
   }
 
-  document.getElementById('historialBody').innerHTML = picks.map(p => {
-    const stBadge = p.estado==='ganado'?'status-won':p.estado==='perdido'?'status-lost':p.estado==='void'?'status-void':'status-pending';
-    const stText = p.estado==='ganado'?'✓ Ganado':p.estado==='perdido'?'✕ Perdido':p.estado==='void'?'○ Void':'⏳ Pendiente';
-    const plText = p.estado==='ganado'?`+$${((p.momio-1)*p.stake).toFixed(0)}`:p.estado==='perdido'?`-$${p.stake}`:'$0';
-    const plColor = p.estado==='ganado'?'var(--green)':p.estado==='perdido'?'var(--red)':'var(--text3)';
+  if(isMobile) {
+    // ── MÓVIL: cards tipo app ──
+    const cardsHTML = picks.map(p => {
+      const stBadge = p.estado==='ganado'?'status-won':p.estado==='perdido'?'status-lost':p.estado==='void'?'status-void':'status-pending';
+      const stText = p.estado==='ganado'?'✓ Ganado':p.estado==='perdido'?'✕ Perdido':p.estado==='void'?'○ Void':'⏳ Pendiente';
+      const plText = p.estado==='ganado'?`+$${((p.momio-1)*p.stake).toFixed(0)}`:p.estado==='perdido'?`-$${p.stake}`:'—';
+      const plColor = p.estado==='ganado'?'var(--green)':p.estado==='perdido'?'var(--red)':'var(--text3)';
+      const borderColor = p.estado==='ganado'?'var(--green)':p.estado==='perdido'?'var(--red)':p.estado==='pendiente'?'var(--yellow)':'var(--border)';
 
-    return `<tr>
-      <td><div style="font-weight:600;font-size:12px">${p.partido}</div><div style="font-size:10px;color:var(--text3)">${p.deporte} · ${p.plataforma}</div></td>
-      <td style="font-size:11px;max-width:160px">${p.mercado}</td>
-      <td><span style="font-family:monospace;color:${confColor(p.confianza)}">${p.confianza}%</span></td>
-      <td style="font-family:monospace">@${p.momio}</td>
-      <td>$${p.stake}</td>
-      <td style="font-weight:700;color:${plColor}">${plText}</td>
-      <td><span class="status-badge ${stBadge}">${stText}</span></td>
-      <td style="font-size:11px;color:var(--text3)">${p.fecha}</td>
-      <td>
-        <div style="display:flex;gap:4px">
-          <button class="icon-btn" onclick="openResultModal(${p.id})" title="Actualizar resultado">📊</button>
-          <button class="icon-btn danger" onclick="deletePick(${p.id})" title="Eliminar">🗑</button>
+      return `<div style="border-left:3px solid ${borderColor};background:var(--bg2);padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.05)">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+          <div style="flex:1;min-width:0;margin-right:12px">
+            <div style="font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.partido}</div>
+            <div style="font-size:12px;color:var(--text2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.mercado}</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:18px;font-weight:800;color:${plColor};font-family:'JetBrains Mono',monospace">${plText}</div>
+            <span class="status-badge ${stBadge}" style="font-size:9px">${stText}</span>
+          </div>
         </div>
-      </td>
-    </tr>`;
-  }).join('');
+        <div style="display:flex;gap:12px;align-items:center;font-size:11px;color:var(--text3)">
+          <span style="color:${confColor(p.confianza)};font-weight:700">${p.confianza}%</span>
+          <span>@${p.momio}</span>
+          <span>$${p.stake}</span>
+          <span style="margin-left:auto">${p.fecha}</span>
+          <button style="background:none;border:none;cursor:pointer;font-size:16px;padding:2px" onclick="openResultModal(${p.id})">📊</button>
+          <button style="background:none;border:none;cursor:pointer;font-size:16px;padding:2px" onclick="deletePick(${p.id})">🗑</button>
+        </div>
+      </div>`;
+    }).join('');
+
+    const wrap = document.getElementById('historialTable')?.parentElement;
+    if(wrap) wrap.innerHTML = `<div>${cardsHTML}</div>`;
+
+  } else {
+    // ── DESKTOP: tabla normal ──
+    document.getElementById('historialBody').innerHTML = picks.map(p => {
+      const stBadge = p.estado==='ganado'?'status-won':p.estado==='perdido'?'status-lost':p.estado==='void'?'status-void':'status-pending';
+      const stText = p.estado==='ganado'?'✓ Ganado':p.estado==='perdido'?'✕ Perdido':p.estado==='void'?'○ Void':'⏳ Pendiente';
+      const plText = p.estado==='ganado'?`+$${((p.momio-1)*p.stake).toFixed(0)}`:p.estado==='perdido'?`-$${p.stake}`:'$0';
+      const plColor = p.estado==='ganado'?'var(--green)':p.estado==='perdido'?'var(--red)':'var(--text3)';
+      return `<tr>
+        <td><div style="font-weight:600;font-size:12px">${p.partido}</div><div style="font-size:10px;color:var(--text3)">${p.deporte} · ${p.plataforma}</div></td>
+        <td style="font-size:11px;max-width:160px">${p.mercado}</td>
+        <td><span style="font-family:monospace;color:${confColor(p.confianza)}">${p.confianza}%</span></td>
+        <td style="font-family:monospace">@${p.momio}</td>
+        <td>$${p.stake}</td>
+        <td style="font-weight:700;color:${plColor}">${plText}</td>
+        <td><span class="status-badge ${stBadge}">${stText}</span></td>
+        <td style="font-size:11px;color:var(--text3)">${p.fecha}</td>
+        <td><div style="display:flex;gap:4px">
+          <button class="icon-btn" onclick="openResultModal(${p.id})">📊</button>
+          <button class="icon-btn danger" onclick="deletePick(${p.id})">🗑</button>
+        </div></td>
+      </tr>`;
+    }).join('');
+  }
 }
 
 function openResultModal(id) {
