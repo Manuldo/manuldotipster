@@ -23,32 +23,33 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0a0a0f;
-  --bg2: #111118;
-  --bg3: #16161f;
-  --bg4: #1e1e2a;
-  --border: #2a2a3a;
-  --border2: #333348;
-  --green: #00e676;
+  /* ── Paleta Facebook Dark Mode ── */
+  --bg:    #18191a;
+  --bg2:   #242526;
+  --bg3:   #3a3b3c;
+  --bg4:   #4a4b4c;
+  --border:  #3a3b3c;
+  --border2: #4a4b4c;
+  --green:  #00e676;
   --green2: #00c853;
-  --red: #ff1744;
-  --yellow: #ffd600;
-  --blue: #448aff;
+  --red:    #e41e3f;
+  --yellow: #f5c518;
+  --blue:   #1877f2;
   --purple: #7c4dff;
   --orange: #ff6d00;
-  --text: #f0f0f8;
-  --text2: #9090b0;
-  --text3: #5a5a7a;
-  --accent: #00e676;
-  --gold: #ffd600;
+  --text:   #e4e6eb;
+  --text2:  #b0b3b8;
+  --text3:  #8a8d91;
+  --accent: #1877f2;
+  --gold:   #f5c518;
   --silver: #90a4ae;
   --bronze: #ff8f00;
   --card-radius: 12px;
-  /* Safe area para notch iPhone/Android */
   --sat: env(safe-area-inset-top, 0px);
   --sab: env(safe-area-inset-bottom, 0px);
   --sal: env(safe-area-inset-left, 0px);
   --sar: env(safe-area-inset-right, 0px);
+  --transition: all 0.15s ease;
 }
 
 @keyframes pulse {
@@ -86,10 +87,10 @@ body {
 /* ─── LAYOUT ─── */
 .app { display: flex; min-height: 100vh; }
 
-/* ─── SIDEBAR ─── */
+/* ─── SIDEBAR — Facebook left panel ─── */
 .sidebar {
-  width: 220px;
-  min-width: 220px;
+  width: 240px;
+  min-width: 240px;
   background: var(--bg2);
   border-right: 1px solid var(--border);
   display: flex;
@@ -104,82 +105,99 @@ body {
 }
 
 .logo {
-  padding: 20px 16px 16px;
-  padding-top: max(20px, calc(var(--sat) + 12px));
-  border-bottom: 1px solid var(--border);
-}
-
-.logo-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 28px;
-  letter-spacing: 3px;
-  color: var(--text);
-  line-height: 1;
-}
-
-.logo-dot { color: var(--green); }
-
-.logo-year {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  color: var(--text3);
-  letter-spacing: 2px;
-  margin-top: 2px;
-}
-
-.logo-mascot {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid var(--green);
-  margin-bottom: 8px;
-  display: block;
-}
-
-.nav { padding: 12px 0; flex: 1; }
-
-.nav-section {
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  color: var(--text3);
-  padding: 12px 16px 4px;
-  text-transform: uppercase;
-}
-
-.nav-item {
+  padding: 16px;
+  padding-top: max(16px, calc(var(--sat) + 12px));
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 9px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Avatar circular estilo FB en logo */
+.logo-avatar {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: var(--blue);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 900; color: #fff;
+  flex-shrink: 0;
+}
+
+.logo-title {
+  font-family: -apple-system, 'Helvetica Neue', sans-serif;
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.1;
+}
+
+.logo-dot { color: var(--blue); }
+
+.logo-year {
+  font-size: 11px;
+  color: var(--text3);
+  font-weight: 500;
+  margin-top: 1px;
+}
+
+.logo-mascot {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--blue);
+  display: block;
+}
+
+.nav { padding: 8px 0; flex: 1; }
+
+.nav-section {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text3);
+  padding: 10px 16px 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Nav items estilo FB — pill con hover */
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
   cursor: pointer;
   color: var(--text2);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   transition: var(--transition);
-  border-left: 3px solid transparent;
+  border-radius: 10px;
+  margin: 2px 8px;
+  border-left: none;
   position: relative;
 }
 
 .nav-item:hover { background: var(--bg3); color: var(--text); }
-.nav-item.active { color: var(--green); border-left-color: var(--green); background: rgba(0,230,118,0.06); }
+.nav-item.active {
+  background: rgba(24,119,242,0.12);
+  color: var(--blue);
+  font-weight: 700;
+}
+.nav-item.active .nav-icon { filter: none; }
 
-.nav-icon { font-size: 15px; width: 20px; text-align: center; }
+.nav-icon { font-size: 18px; width: 22px; text-align: center; flex-shrink: 0; }
 
 .badge {
   margin-left: auto;
-  background: var(--green);
-  color: #000;
+  background: var(--red);
+  color: #fff;
   font-size: 10px;
-  font-weight: 700;
-  padding: 1px 6px;
+  font-weight: 800;
+  padding: 2px 7px;
   border-radius: 10px;
   min-width: 18px;
   text-align: center;
 }
-
-.badge.red { background: var(--red); color: #fff; }
+.badge.green { background: var(--green); color: #000; }
 .badge.yellow { background: var(--yellow); color: #000; }
 
 .sidebar-footer {
@@ -197,7 +215,7 @@ body {
 }
 
 .api-dot {
-  width: 6px; height: 6px;
+  width: 8px; height: 8px;
   border-radius: 50%;
   background: var(--text3);
 }
@@ -206,44 +224,45 @@ body {
 
 .btn-api {
   width: 100%;
-  padding: 7px;
-  background: var(--bg4);
-  border: 1px solid var(--border2);
+  padding: 8px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
   border-radius: 8px;
   color: var(--text2);
-  font-size: 11px;
+  font-size: 12px;
+  font-weight: 600;
   cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
+  font-family: inherit;
   transition: var(--transition);
 }
-.btn-api:hover { border-color: var(--green); color: var(--green); }
+.btn-api:hover { background: var(--bg4); color: var(--text); }
 
 /* ─── MAIN ─── */
 .main {
-  margin-left: 220px;
+  margin-left: 240px;
   flex: 1;
   min-height: 100vh;
+  background: var(--bg);
 }
-
-/* ─── TOP BAR ─── */
 .topbar {
-  height: 52px;
+  height: 56px;
   background: var(--bg2);
   border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
-  padding: 0 24px;
-  padding-right: calc(24px + var(--sar));
-  gap: 16px;
+  padding: 0 20px;
+  padding-right: calc(20px + var(--sar));
+  gap: 12px;
   position: sticky;
   top: 0;
   z-index: 90;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.3);
 }
 
 .topbar-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 20px;
-  letter-spacing: 2px;
+  font-family: -apple-system, 'Helvetica Neue', sans-serif;
+  font-size: 17px;
+  font-weight: 800;
   color: var(--text);
   flex: 1;
 }
@@ -251,26 +270,27 @@ body {
 .topbar-date {
   font-size: 12px;
   color: var(--text3);
-  font-family: 'JetBrains Mono', monospace;
+  font-weight: 500;
 }
 
 /* ─── CONTENT ─── */
 .content {
-  padding: 24px;
-  max-width: 1400px;
+  padding: 16px;
+  max-width: 1200px;
 }
 
 /* ─── SECTION ─── */
 .section { display: none; }
 .section.active { display: block; }
 
-/* ─── CARDS ─── */
+/* ─── CARDS — Facebook post style ─── */
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: var(--card-radius);
-  padding: 20px;
+  border-radius: 12px;
+  padding: 16px;
   transition: var(--transition);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
 }
 
 .card:hover { border-color: var(--border2); }
@@ -279,51 +299,48 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
 .card-title {
-  font-size: 11px;
+  font-size: 15px;
   font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--text3);
+  color: var(--text);
 }
 
 /* ─── DASHBOARD ─── */
 .dash-grid {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  gap: 12px;
-  margin-bottom: 20px;
+  gap: 10px;
+  margin-bottom: 16px;
 }
 
 .stat-card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: var(--card-radius);
-  padding: 16px;
+  border-radius: 12px;
+  padding: 14px;
   text-align: center;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
 }
 
 .stat-label {
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
+  font-size: 11px;
+  font-weight: 600;
   color: var(--text3);
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .stat-value {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 32px;
-  letter-spacing: 1px;
+  font-family: -apple-system, 'Helvetica Neue', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
   line-height: 1;
 }
 
 .stat-sub {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--text3);
   margin-top: 4px;
 }
@@ -337,15 +354,15 @@ body {
 .dash-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 16px;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
 .dash-row-3 {
   display: grid;
   grid-template-columns: 2fr 1fr;
-  gap: 16px;
-  margin-bottom: 16px;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
 /* ─── PICK ITEM ─── */
@@ -426,29 +443,31 @@ body {
 .icon-btn:hover { color: var(--text); background: var(--bg4); }
 .icon-btn.danger:hover { color: var(--red); }
 
-/* ─── BUTTONS ─── */
+/* ─── BUTTONS — Facebook style ─── */
 .btn {
-  padding: 9px 18px;
+  padding: 8px 16px;
   border-radius: 8px;
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 700;
   cursor: pointer;
   border: none;
   transition: var(--transition);
-  font-family: 'DM Sans', sans-serif;
+  font-family: inherit;
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .btn-primary {
-  background: var(--green);
-  color: #000;
+  background: var(--blue);
+  color: #fff;
 }
-.btn-primary:hover { background: var(--green2); transform: translateY(-1px); }
+.btn-primary:hover { background: #166fe5; }
+.btn-primary:active { transform: scale(0.98); }
 
 .btn-secondary {
-  background: var(--bg4);
+  background: var(--bg3);
   color: var(--text);
   border: 1px solid var(--border2);
 }
@@ -531,13 +550,17 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .section-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 28px;
-  letter-spacing: 2px;
+  font-family: -apple-system, 'Helvetica Neue', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.3px;
 }
 
 /* ─── ANALYSIS ITEM ─── */
@@ -1377,8 +1400,9 @@ body {
   .topbar {
     height: 56px;
     padding: 0 16px;
-    background: #0a0a0f;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.3);
   }
   .topbar-date { display: none; }
   .version-tag { display: none; }
@@ -1597,89 +1621,77 @@ body {
   .empty-state { padding: 40px 20px; }
 }
 
+
 /* ═══════════════════════════════════════════
-   BOTTOM NAV — Navegación móvil estilo app
+   BOTTOM NAV — Facebook style
    ═══════════════════════════════════════════ */
 #mobileNav {
   display: none;
   position: fixed;
   bottom: 0; left: 0; right: 0;
-  background: rgba(10,10,15,0.97);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(255,255,255,0.08);
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
   z-index: 200;
   padding-bottom: var(--sab);
+  box-shadow: 0 -1px 4px rgba(0,0,0,0.3);
 }
 
 #mobileNav .mob-nav-inner {
   display: flex;
   align-items: stretch;
-  height: 64px;
+  height: 56px;
   overflow-x: auto;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
-  padding: 0 4px;
 }
 #mobileNav .mob-nav-inner::-webkit-scrollbar { display: none; }
 
 .mob-nav-item {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 3px;
-  padding: 8px 16px;
   cursor: pointer;
-  color: rgba(255,255,255,0.35);
-  transition: color 0.15s, transform 0.1s;
+  color: var(--text3);
+  transition: color 0.15s;
   white-space: nowrap;
-  min-width: 60px;
+  min-width: 52px;
   border: none;
   background: none;
-  font-family: 'DM Sans', sans-serif;
+  font-family: inherit;
   flex-shrink: 0;
   position: relative;
   -webkit-tap-highlight-color: transparent;
+  border-top: 3px solid transparent;
+  padding-top: 3px;
 }
-.mob-nav-item:active { transform: scale(0.9); }
-.mob-nav-item.active { color: var(--green); }
-.mob-nav-item.active .mob-icon { filter: drop-shadow(0 0 6px var(--green)); }
+
+.mob-nav-item:active { background: var(--bg3); }
+.mob-nav-item.active { color: var(--blue); border-top-color: var(--blue); }
 
 .mob-icon { font-size: 22px; line-height: 1; }
-.mob-label { font-size: 9px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+.mob-label { font-size: 10px; font-weight: 700; }
 
 .mob-badge {
   position: absolute;
-  top: 6px;
-  right: 10px;
+  top: 4px; right: 8px;
   background: var(--red);
   color: #fff;
-  font-size: 8px;
+  font-size: 9px;
   font-weight: 800;
   border-radius: 10px;
   padding: 1px 5px;
   min-width: 16px;
   text-align: center;
-  border: 2px solid #0a0a0f;
-}
-
-/* Línea indicador activo arriba */
-.mob-nav-item.active::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 24px;
-  height: 2px;
-  background: var(--green);
-  border-radius: 0 0 2px 2px;
+  border: 2px solid var(--bg2);
 }
 
 @media (max-width: 768px) {
   #mobileNav { display: block; }
 }
+
 
 /* ─── ANIMACIONES ENTRADA ─── */
 .fade-in {
@@ -1825,17 +1837,15 @@ body {
 <!-- ─── SIDEBAR ─── -->
 <aside class="sidebar">
   <div class="logo">
-    <div style="display:flex;align-items:center;gap:10px">
-      <div id="mascotContainer" style="position:relative;width:44px;height:44px;flex-shrink:0">
-        <!-- Mascota El Compatipster — cicla entre imágenes según estado -->
-        <img id="mascotImg" src="" alt="El Compatipster"
-          style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--green);cursor:pointer"
-          onclick="cycleMascot()" title="El Compatipster">
-      </div>
-      <div>
-        <div class="logo-title">MANULDO<span class="logo-dot">◆</span></div>
-        <div class="logo-year">TIPSTER · 2026</div>
-      </div>
+    <div id="mascotContainer" style="position:relative;width:44px;height:44px;flex-shrink:0">
+      <img id="mascotImg" src="" alt="El Compatipster"
+        style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--blue);cursor:pointer;display:none"
+        onclick="cycleMascot()" title="El Compatipster">
+      <div id="mascotFallback" style="width:44px;height:44px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;cursor:pointer" onclick="cycleMascot()">M</div>
+    </div>
+    <div>
+      <div class="logo-title">Manuldo<span class="logo-dot">.</span></div>
+      <div class="logo-year">Tipster · 2026</div>
     </div>
   </div>
 
