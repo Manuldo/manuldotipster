@@ -51,8 +51,16 @@
   --sar: env(safe-area-inset-right, 0px);
 }
 
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+#matchesList { padding: 6px 0 12px; }
+
 /* Prevenir overflow horizontal global en móvil */
 @media (max-width: 768px) {
+  #matchesList { padding: 4px 0 16px; }
   html, body { overflow-x: hidden; max-width: 100vw; }
   * { box-sizing: border-box; }
   .main { overflow-x: hidden; }
@@ -2885,12 +2893,16 @@ function processESPN(events) {
       id: e.id || i+1,
       home: home?.team?.displayName || home?.team?.name || '?',
       away: away?.team?.displayName || away?.team?.name || '?',
+      homeLogo: home?.team?.logo || null,
+      awayLogo: away?.team?.logo || null,
+      leagueFlag: e.league?.flag || null,
       league: leagueClean || 'Fútbol',
       country: home?.team?.location || '',
       time: d.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'}),
       scoreHome: isLive||isFinal ? +(home?.score||0) : null,
       scoreAway: isLive||isFinal ? +(away?.score||0) : null,
       status: isLive?'inprogress':isFinal?'finished':'notstarted',
+      minute: e.status?.displayClock || null,
     });
   });
   return out;
@@ -2955,54 +2967,65 @@ function renderMatches() {
     const isLive = m.status === 'inprogress';
     const isFinal = m.status === 'finished';
     const hasScore = m.scoreHome !== null && m.scoreAway !== null;
-
-    // Tiempo display
-    let timeHTML;
-    if(isLive) {
-      timeHTML = `<div style="display:flex;flex-direction:column;align-items:center;gap:2px">
-        <span class="live-badge"><span class="live-dot"></span>LIVE</span>
-        ${m.minute ? `<span style="font-size:9px;color:var(--red)">${m.minute}</span>` : ''}
-      </div>`;
-    } else if(isFinal) {
-      timeHTML = `<div style="text-align:center"><div style="font-size:9px;font-weight:700;color:var(--text3);letter-spacing:1px">FIN</div></div>`;
-    } else {
-      timeHTML = `<div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text3);text-align:center;line-height:1.2">${m.time}</div>`;
-    }
-
-    // Score display
-    let scoreHTML;
-    if(hasScore) {
-      const col = isLive ? 'var(--red)' : isFinal ? 'var(--text2)' : 'var(--yellow)';
-      scoreHTML = `<div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:${col};min-width:50px;text-align:center;letter-spacing:1px">${m.scoreHome}–${m.scoreAway}</div>`;
-    } else {
-      scoreHTML = `<div style="min-width:50px;text-align:center;font-size:11px;color:var(--text3)">vs</div>`;
-    }
-
-    // Recordatorio badge
     const hasReminder = state.recordatorios?.some(r=>String(r.matchId)===String(m.id));
 
-    return `<div class="match-row ${isFinal?'match-finished':''}" onclick="selectMatch('${m.id}')" style="${isFinal?'opacity:0.65':''}">
-      <!-- Liga arriba (visible en móvil) -->
-      <div class="match-league" style="display:flex;align-items:center;gap:5px">
-        <span>${m.leagueFlag||'⚽'}</span><span>${m.league}</span>
+    // Logo helper — escudo ESPN o inicial del equipo
+    const logoEl = (name, logoUrl) => {
+      if(logoUrl) return `<img src="${logoUrl}" style="width:36px;height:36px;object-fit:contain;filter:drop-shadow(0 1px 3px rgba(0,0,0,0.5))" onerror="this.outerHTML='<div style=\\'width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#888\\'>${name.charAt(0)}</div>'">`; 
+      return `<div style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#aaa">${name.charAt(0)}</div>`;
+    };
+
+    // Tiempo / estado
+    let centerHTML;
+    if(isLive) {
+      centerHTML = `
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px">
+          <div style="font-size:22px;font-weight:900;color:#fff;font-family:'JetBrains Mono',monospace;letter-spacing:2px">${m.scoreHome} – ${m.scoreAway}</div>
+          <div style="display:flex;align-items:center;gap:4px;background:rgba(255,68,68,0.15);border:1px solid rgba(255,68,68,0.4);border-radius:20px;padding:2px 8px">
+            <div style="width:5px;height:5px;border-radius:50%;background:#ff4444;animation:pulse 1s infinite"></div>
+            <span style="font-size:10px;font-weight:800;color:#ff4444;letter-spacing:1px">${m.minute||'LIVE'}</span>
+          </div>
+        </div>`;
+    } else if(isFinal) {
+      centerHTML = `
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+          <div style="font-size:22px;font-weight:900;color:rgba(255,255,255,0.4);font-family:'JetBrains Mono',monospace;letter-spacing:2px">${m.scoreHome} – ${m.scoreAway}</div>
+          <div style="font-size:9px;font-weight:800;color:rgba(255,255,255,0.25);letter-spacing:2px">FIN</div>
+        </div>`;
+    } else {
+      centerHTML = `
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+          <div style="font-size:16px;font-weight:700;color:rgba(255,255,255,0.5);letter-spacing:1px">vs</div>
+          <div style="font-size:13px;font-weight:700;color:#00e676;font-family:'JetBrains Mono',monospace">${m.time}</div>
+        </div>`;
+    }
+
+    return `
+    <div style="background:#161616;margin:6px 12px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.06);${isFinal?'opacity:0.6':''}" onclick="selectMatch('${m.id}')">
+      <!-- Liga header -->
+      <div style="padding:8px 14px;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:space-between">
+        <span style="font-size:10px;font-weight:800;letter-spacing:1.5px;color:#555;text-transform:uppercase">${m.leagueFlag||'⚽'} ${m.league}</span>
+        ${hasReminder ? '<span style="font-size:12px">🔔</span>' : ''}
       </div>
-      <!-- Fila central: equipo - marcador - equipo -->
-      <div class="match-teams">
-        <div style="flex:1;min-width:0">
-          <div style="font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${m.home}</div>
+      <!-- Equipos y marcador -->
+      <div style="padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:8px">
+        <!-- Local -->
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0">
+          ${logoEl(m.home, m.homeLogo)}
+          <div style="font-size:12px;font-weight:700;color:#fff;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:90px">${m.home}</div>
         </div>
-        <div style="display:flex;flex-direction:column;align-items:center;gap:2px;flex-shrink:0;padding:0 10px">
-          ${timeHTML}
-          ${scoreHTML}
-        </div>
-        <div style="flex:1;min-width:0;text-align:right">
-          <div style="font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${m.away}</div>
+        <!-- Centro: score/hora -->
+        <div style="flex-shrink:0;padding:0 8px">${centerHTML}</div>
+        <!-- Visitante -->
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0">
+          ${logoEl(m.away, m.awayLogo)}
+          <div style="font-size:12px;font-weight:700;color:#fff;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:90px">${m.away}</div>
         </div>
       </div>
       <!-- Botones -->
-      <div style="display:flex;gap:8px;align-items:center">
-        <button class="btn-analyze-match" onclick="event.stopPropagation();analyzeMatch('${m.id}')">🧠 Analizar</button>
-        <button onclick="event.stopPropagation();toggleRecordatorio('${m.id}','${(m.home+' vs '+m.away).replace(/'/g,"")}','${m.time||''}')" style="background:none;border:1px solid rgba(255,255,255,0.1);border-radius:8px;cursor:pointer;font-size:16px;padding:8px 10px;flex-shrink:0" title="${hasReminder?'Quitar recordatorio':'Recordatorio'}">${hasReminder?'🔔':'🔕'}</button>
+      <div style="padding:0 12px 12px;display:flex;gap:8px">
+        <button onclick="event.stopPropagation();analyzeMatch('${m.id}')" style="flex:1;background:rgba(0,230,118,0.1);border:1px solid rgba(0,230,118,0.25);border-radius:10px;color:#00e676;font-size:12px;font-weight:700;padding:9px;cursor:pointer;font-family:'DM Sans',sans-serif">🧠 Analizar con IA</button>
+        <button onclick="event.stopPropagation();toggleRecordatorio('${m.id}','${(m.home+' vs '+m.away).replace(/'/g,"")}','${m.time||''}')" style="width:40px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center">${hasReminder?'🔔':'🔕'}</button>
       </div>
     </div>`;
   }).join('') || `<div class="empty-state" style="padding:30px"><div class="empty-icon">⚽</div><div class="empty-title">Sin partidos en esta liga hoy</div></div>`;
