@@ -902,103 +902,207 @@ body {
   overflow: hidden;
 }
 
+/* ─── LEAGUE TABS ─── */
 .matches-tabs {
   display: flex;
-  border-bottom: 1px solid var(--border);
   overflow-x: auto;
-  padding: 0 12px;
-  gap: 4px;
+  padding: 10px 12px;
+  gap: 8px;
+  scrollbar-width: none;
+  background: var(--bg);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
 }
+.matches-tabs::-webkit-scrollbar { display: none; }
 
 .match-tab {
-  padding: 10px 14px;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  color: var(--text3);
-  white-space: nowrap;
-  border-bottom: 2px solid transparent;
-  transition: var(--transition);
-}
-
-.match-tab.active { color: var(--green); border-bottom-color: var(--green); }
-.match-tab:hover { color: var(--text); }
-
-.matches-list { padding: 4px 0; max-height: 400px; overflow-y: auto; }
-
-.match-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 16px;
-  border-bottom: 1px solid var(--border);
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.match-row:last-child { border-bottom: none; }
-.match-row:hover { background: var(--bg3); }
-
-.match-time {
-  font-family: 'JetBrains Mono', monospace;
+  padding: 6px 16px;
   font-size: 11px;
-  color: var(--text3);
-  width: 40px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  color: #555;
+  white-space: nowrap;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.07);
+  transition: all 0.15s;
   flex-shrink: 0;
 }
+.match-tab.active {
+  background: var(--green);
+  color: #000;
+  border-color: var(--green);
+}
 
-.match-time.live { color: var(--red); animation: pulse 1.5s infinite; }
+/* ─── MATCH CARDS — Estilo The Score ─── */
+.match-card-new {
+  background: #161616;
+  margin: 6px 12px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.07);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.1s;
+}
+.match-card-new:active { transform: scale(0.98); }
 
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+.match-card-league {
+  padding: 8px 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #555;
+  text-transform: uppercase;
+}
 
-.match-teams { flex: 1; min-width: 0; }
-.match-team-names {
-  font-size: 13px;
-  font-weight: 600;
+.match-card-body {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.match-card-team {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.match-card-logo {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+.match-card-logo-placeholder {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.07);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 900;
+  color: #666;
+}
+
+.match-card-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  text-align: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  max-width: 95px;
+  width: 100%;
 }
-.match-league { font-size: 10px; color: var(--text3); }
 
-.match-score {
+.match-card-center {
+  flex-shrink: 0;
+  padding: 0 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.match-card-score {
+  font-size: 26px;
+  font-weight: 900;
+  color: #fff;
   font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 2px;
+}
+
+.match-card-score.finished { color: rgba(255,255,255,0.35); }
+
+.match-card-time {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--green);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.match-card-live {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255,68,68,0.15);
+  border: 1px solid rgba(255,68,68,0.35);
+  border-radius: 20px;
+  padding: 3px 10px;
+  font-size: 10px;
+  font-weight: 800;
+  color: #ff4444;
+  letter-spacing: 1px;
+}
+
+.match-card-live-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #ff4444;
+  animation: pulseDot 1s infinite;
+}
+
+@keyframes pulseDot { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+.match-card-fin {
+  font-size: 9px;
+  font-weight: 800;
+  color: rgba(255,255,255,0.2);
+  letter-spacing: 2px;
+}
+
+.match-card-vs {
   font-size: 13px;
   font-weight: 700;
-  color: var(--yellow);
-  width: 40px;
-  text-align: center;
+  color: rgba(255,255,255,0.25);
 }
 
-.match-odds {
+.match-card-footer {
+  padding: 0 12px 12px;
   display: flex;
-  gap: 4px;
+  gap: 8px;
 }
 
-.odd-pill {
-  padding: 3px 6px;
-  background: var(--bg4);
-  border-radius: 4px;
-  font-size: 10px;
-  font-family: 'JetBrains Mono', monospace;
-  color: var(--text2);
-  border: 1px solid var(--border);
-}
-
-.btn-analyze-match {
-  padding: 4px 10px;
+.match-card-btn-analyze {
+  flex: 1;
   background: rgba(0,230,118,0.1);
-  border: 1px solid rgba(0,230,118,0.2);
-  border-radius: 6px;
+  border: 1px solid rgba(0,230,118,0.25);
+  border-radius: 10px;
   color: var(--green);
-  font-size: 10px;
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 10px;
   cursor: pointer;
-  white-space: nowrap;
-  transition: var(--transition);
+  font-family: 'DM Sans', sans-serif;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.btn-analyze-match:hover { background: rgba(0,230,118,0.2); }
+.match-card-btn-remind {
+  width: 42px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+}
 
 /* ─── TOAST ─── */
 .toast-container {
@@ -1899,13 +2003,10 @@ body {
       </div>
 
       <div id="matchesContainer">
-        <div class="card" style="padding:0;overflow:hidden">
-          <div class="matches-list" id="matchesList">
-            <div class="empty-state" style="padding:40px">
-              <div class="empty-icon">⚽</div>
-              <div class="empty-title">Cargando partidos...</div>
-              <div class="empty-sub">Obteniendo datos de hoy</div>
-            </div>
+        <div id="matchesList">
+          <div style="text-align:center;padding:60px 20px;color:#555">
+            <div style="font-size:40px;margin-bottom:12px">⚽</div>
+            <div style="font-size:15px;font-weight:700;color:#888">Cargando partidos...</div>
           </div>
         </div>
       </div>
@@ -2966,90 +3067,70 @@ function renderMatches() {
   const html = filtered.map(m => {
     const isLive = m.status === 'inprogress';
     const isFinal = m.status === 'finished';
-    const hasScore = m.scoreHome !== null && m.scoreAway !== null;
     const hasReminder = state.recordatorios?.some(r=>String(r.matchId)===String(m.id));
 
-    // Logo helper — escudo ESPN o inicial del equipo
-    const logoEl = (name, logoUrl) => {
-      if(logoUrl) return `<img src="${logoUrl}" style="width:36px;height:36px;object-fit:contain;filter:drop-shadow(0 1px 3px rgba(0,0,0,0.5))" onerror="this.outerHTML='<div style=\\'width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#888\\'>${name.charAt(0)}</div>'">`; 
-      return `<div style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#aaa">${name.charAt(0)}</div>`;
-    };
+    const mkLogo = (name, url) => url
+      ? `<img class="match-card-logo" src="${url}" onerror="this.outerHTML='<div class=\\'match-card-logo-placeholder\\'>${name.charAt(0)}</div>'">`
+      : `<div class="match-card-logo-placeholder">${name.charAt(0)}</div>`;
 
-    // Tiempo / estado
     let centerHTML;
     if(isLive) {
       centerHTML = `
-        <div style="display:flex;flex-direction:column;align-items:center;gap:3px">
-          <div style="font-size:22px;font-weight:900;color:#fff;font-family:'JetBrains Mono',monospace;letter-spacing:2px">${m.scoreHome} – ${m.scoreAway}</div>
-          <div style="display:flex;align-items:center;gap:4px;background:rgba(255,68,68,0.15);border:1px solid rgba(255,68,68,0.4);border-radius:20px;padding:2px 8px">
-            <div style="width:5px;height:5px;border-radius:50%;background:#ff4444;animation:pulse 1s infinite"></div>
-            <span style="font-size:10px;font-weight:800;color:#ff4444;letter-spacing:1px">${m.minute||'LIVE'}</span>
-          </div>
-        </div>`;
+        <div class="match-card-score">${m.scoreHome} – ${m.scoreAway}</div>
+        <div class="match-card-live"><div class="match-card-live-dot"></div>${m.minute||'LIVE'}</div>`;
     } else if(isFinal) {
       centerHTML = `
-        <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
-          <div style="font-size:22px;font-weight:900;color:rgba(255,255,255,0.4);font-family:'JetBrains Mono',monospace;letter-spacing:2px">${m.scoreHome} – ${m.scoreAway}</div>
-          <div style="font-size:9px;font-weight:800;color:rgba(255,255,255,0.25);letter-spacing:2px">FIN</div>
-        </div>`;
+        <div class="match-card-score finished">${m.scoreHome} – ${m.scoreAway}</div>
+        <div class="match-card-fin">FIN</div>`;
     } else {
       centerHTML = `
-        <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
-          <div style="font-size:16px;font-weight:700;color:rgba(255,255,255,0.5);letter-spacing:1px">vs</div>
-          <div style="font-size:13px;font-weight:700;color:#00e676;font-family:'JetBrains Mono',monospace">${m.time}</div>
-        </div>`;
+        <div class="match-card-vs">vs</div>
+        <div class="match-card-time">${m.time}</div>`;
     }
 
     return `
-    <div style="background:#161616;margin:6px 12px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.06);${isFinal?'opacity:0.6':''}" onclick="selectMatch('${m.id}')">
-      <!-- Liga header -->
-      <div style="padding:8px 14px;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:space-between">
-        <span style="font-size:10px;font-weight:800;letter-spacing:1.5px;color:#555;text-transform:uppercase">${m.leagueFlag||'⚽'} ${m.league}</span>
-        ${hasReminder ? '<span style="font-size:12px">🔔</span>' : ''}
+    <div class="match-card-new" onclick="selectMatch('${m.id}')">
+      <div class="match-card-league">
+        <span>${m.leagueFlag||'⚽'} ${m.league}</span>
+        ${hasReminder?'<span>🔔</span>':''}
       </div>
-      <!-- Equipos y marcador -->
-      <div style="padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:8px">
-        <!-- Local -->
-        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0">
-          ${logoEl(m.home, m.homeLogo)}
-          <div style="font-size:12px;font-weight:700;color:#fff;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:90px">${m.home}</div>
+      <div class="match-card-body">
+        <div class="match-card-team">
+          ${mkLogo(m.home, m.homeLogo)}
+          <div class="match-card-name">${m.home}</div>
         </div>
-        <!-- Centro: score/hora -->
-        <div style="flex-shrink:0;padding:0 8px">${centerHTML}</div>
-        <!-- Visitante -->
-        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0">
-          ${logoEl(m.away, m.awayLogo)}
-          <div style="font-size:12px;font-weight:700;color:#fff;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:90px">${m.away}</div>
+        <div class="match-card-center">${centerHTML}</div>
+        <div class="match-card-team">
+          ${mkLogo(m.away, m.awayLogo)}
+          <div class="match-card-name">${m.away}</div>
         </div>
       </div>
-      <!-- Botones -->
-      <div style="padding:0 12px 12px;display:flex;gap:8px">
-        <button onclick="event.stopPropagation();analyzeMatch('${m.id}')" style="flex:1;background:rgba(0,230,118,0.1);border:1px solid rgba(0,230,118,0.25);border-radius:10px;color:#00e676;font-size:12px;font-weight:700;padding:9px;cursor:pointer;font-family:'DM Sans',sans-serif">🧠 Analizar con IA</button>
-        <button onclick="event.stopPropagation();toggleRecordatorio('${m.id}','${(m.home+' vs '+m.away).replace(/'/g,"")}','${m.time||''}')" style="width:40px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center">${hasReminder?'🔔':'🔕'}</button>
+      <div class="match-card-footer">
+        <button class="match-card-btn-analyze" onclick="event.stopPropagation();analyzeMatch('${m.id}')">🧠 Analizar con IA</button>
+        <button class="match-card-btn-remind" onclick="event.stopPropagation();toggleRecordatorio('${m.id}','${(m.home+' vs '+m.away).replace(/'/g,"")}','${m.time||''}')">${hasReminder?'🔔':'🔕'}</button>
       </div>
     </div>`;
-  }).join('') || `<div class="empty-state" style="padding:30px"><div class="empty-icon">⚽</div><div class="empty-title">Sin partidos en esta liga hoy</div></div>`;
+  }).join('') || `<div style="text-align:center;padding:60px 20px"><div style="font-size:40px;margin-bottom:12px">⚽</div><div style="font-size:15px;color:#555">Sin partidos en esta liga hoy</div></div>`;
 
   if(container) container.innerHTML = html;
 
-  // Dashboard mini version (top 8)
+  // Dashboard mini version
   if(dashContainer) {
-    dashContainer.innerHTML = filtered.slice(0,8).map(m => {
-      const isLive = ['inprogress','1st','2nd','ht'].includes(m.status);
-      const score = m.scoreHome !== null ? `${m.scoreHome}-${m.scoreAway}` : '';
-      return `<div class="match-row" style="padding:8px 12px" onclick="showSection('partidos')">
-        <div class="match-time ${isLive?'live':''}" style="font-size:10px">${isLive?'LIVE':m.time}</div>
-        <div class="match-teams">
-          <div class="match-team-names" style="font-size:12px">${m.home} vs ${m.away}</div>
-          <div class="match-league" style="font-size:10px">${m.league}</div>
+    dashContainer.innerHTML = filtered.slice(0,6).map(m => {
+      const isLive = m.status === 'inprogress';
+      const score = m.scoreHome !== null ? `${m.scoreHome}–${m.scoreAway}` : m.time;
+      const col = isLive ? '#ff4444' : m.scoreHome !== null ? '#aaa' : '#00e676';
+      return `<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.05);cursor:pointer" onclick="showSection('partidos')">
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#fff">${m.home} vs ${m.away}</div>
+          <div style="font-size:10px;color:#555;margin-top:1px">${m.leagueFlag||'⚽'} ${m.league}</div>
         </div>
-        <div class="match-score" style="font-size:11px">${score}</div>
+        <div style="font-size:12px;font-weight:700;color:${col};font-family:'JetBrains Mono',monospace;flex-shrink:0">${isLive?'🔴 '+score:score}</div>
       </div>`;
-    }).join('') || `<div class="empty-state" style="padding:20px"><div class="empty-title">Sin partidos hoy</div></div>`;
+    }).join('') || `<div style="text-align:center;padding:20px;color:#555">Sin partidos hoy</div>`;
   }
 
-  // Update live count badge
-  const liveCount = matches.filter(m=>['inprogress','1st','2nd','ht'].includes(m.status)).length;
+  const liveCount = matches.filter(m=>m.status==='inprogress').length;
   const liveEl = document.getElementById('liveCount');
   if(liveEl) { liveEl.style.display = liveCount>0 ? 'block' : 'none'; }
 }
