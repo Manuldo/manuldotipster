@@ -1146,7 +1146,171 @@
   <div id="sheetContent"></div>
 </div>
 
+<!-- SETTINGS SHEET -->
+<div class="sheet-overlay" id="settingsOverlay" onclick="closeSettings()"></div>
+<div class="sheet" id="settingsSheet">
+  <div class="sheet-handle"></div>
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+    <div style="font-size:26px">&#9881;&#65039;</div>
+    <div class="sheet-title" style="margin-bottom:0">Configuracion</div>
+  </div>
+  <div class="sheet-sub">Manuldo Baseball 2026 v1.0</div>
+
+  <div style="background:rgba(232,184,75,0.07);border:1px solid rgba(232,184,75,0.2);border-radius:var(--radius);padding:16px;margin-bottom:12px">
+    <div style="font-family:var(--font-mono);font-size:10px;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px">Anthropic API Key</div>
+    <div style="position:relative">
+      <input id="apiKeyInput" type="password" placeholder="sk-ant-api03-..."
+        style="width:100%;background:rgba(0,0,0,0.3);border:1px solid var(--border-bright);border-radius:10px;
+               padding:12px 44px 12px 14px;color:var(--text-primary);font-family:var(--font-mono);font-size:13px;
+               outline:none;-webkit-appearance:none;appearance:none;">
+      <div id="eyeBtn" onclick="toggleApiVis()"
+        style="position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:18px;cursor:pointer;opacity:0.6;user-select:none">&#128065;</div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:10px">
+      <button onclick="saveApiKey()"
+        style="flex:1;background:linear-gradient(135deg,var(--accent),#c8941a);color:#0a0f1a;border:none;
+               border-radius:10px;padding:12px;font-size:13px;font-weight:800;cursor:pointer;font-family:var(--font-body)">
+        Guardar Key
+      </button>
+      <button onclick="clearApiKey()"
+        style="background:rgba(255,90,90,0.12);border:1px solid rgba(255,90,90,0.25);color:var(--red);
+               border-radius:10px;padding:12px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font-body)">
+        Borrar
+      </button>
+    </div>
+    <div id="apiStatus" style="margin-top:10px;font-family:var(--font-mono);font-size:11px;display:none"></div>
+  </div>
+
+  <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px">
+    <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px">Modelo IA</div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:10px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid var(--border)">
+        <input type="radio" name="aimodel" value="claude-haiku-4-5-20251001" id="modelHaiku" checked style="accent-color:var(--accent);width:16px;height:16px">
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:700">Claude Haiku 4.5</div>
+          <div style="font-size:11px;color:var(--text-dim);font-family:var(--font-mono)">Rapido - Economico - Recomendado</div>
+        </div>
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--green)">~$0.001</div>
+      </label>
+      <label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:10px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid var(--border)">
+        <input type="radio" name="aimodel" value="claude-sonnet-4-5" id="modelSonnet" style="accent-color:var(--accent);width:16px;height:16px">
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:700">Claude Sonnet 4.5</div>
+          <div style="font-size:11px;color:var(--text-dim);font-family:var(--font-mono)">Premium - Momentum - Analisis profundo</div>
+        </div>
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--accent)">~$0.01</div>
+      </label>
+    </div>
+  </div>
+
+  <div style="background:rgba(90,159,255,0.07);border:1px solid rgba(90,159,255,0.18);border-radius:var(--radius);padding:14px;margin-bottom:20px">
+    <div style="font-family:var(--font-mono);font-size:10px;color:var(--blue);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px">Como obtener tu API Key</div>
+    <div style="font-size:12px;color:var(--text-secondary);line-height:1.9">
+      1. Ve a <span style="color:var(--blue);font-family:var(--font-mono)">console.anthropic.com</span><br>
+      2. Settings &rarr; API Keys &rarr; Create Key<br>
+      3. Copia la key (empieza con <span style="font-family:var(--font-mono);color:var(--accent)">sk-ant-</span>)<br>
+      4. Pegala arriba y guarda<br><br>
+      <span style="color:var(--text-dim)">Se guarda solo en tu dispositivo (localStorage). Nunca sale de tu app.</span>
+    </div>
+  </div>
+
+  <button onclick="closeSettings()"
+    style="width:100%;background:var(--bg-card);border:1px solid var(--border);color:var(--text-secondary);
+           border-radius:14px;padding:14px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--font-body)">
+    Cerrar
+  </button>
+</div>
+
 <script>
+
+// =============================================
+// SETTINGS / API KEY
+// =============================================
+
+function getApiKey() {
+  return localStorage.getItem('manuldo_baseball_apikey') || '';
+}
+
+function getModel() {
+  return localStorage.getItem('manuldo_baseball_model') || 'claude-haiku-4-5-20251001';
+}
+
+function openSettings() {
+  var inp = document.getElementById('apiKeyInput');
+  var key = getApiKey();
+  inp.value = key;
+  updateApiStatus(key ? 'saved' : 'empty');
+  var model = getModel();
+  document.querySelectorAll('input[name="aimodel"]').forEach(function(r) {
+    r.checked = (r.value === model);
+  });
+  document.getElementById('settingsOverlay').classList.add('open');
+  setTimeout(function() { document.getElementById('settingsSheet').classList.add('open'); }, 10);
+}
+
+function closeSettings() {
+  document.getElementById('settingsSheet').classList.remove('open');
+  document.getElementById('settingsOverlay').classList.remove('open');
+}
+
+function saveApiKey() {
+  var val = document.getElementById('apiKeyInput').value.trim();
+  if (!val) { updateApiStatus('empty'); return; }
+  if (!val.startsWith('sk-ant-')) { updateApiStatus('invalid'); return; }
+  localStorage.setItem('manuldo_baseball_apikey', val);
+  var sel = document.querySelector('input[name="aimodel"]:checked');
+  if (sel) localStorage.setItem('manuldo_baseball_model', sel.value);
+  updateApiStatus('ok');
+  setTimeout(function(){ updateHeaderBtn(); }, 300);
+}
+
+function clearApiKey() {
+  localStorage.removeItem('manuldo_baseball_apikey');
+  localStorage.removeItem('manuldo_baseball_model');
+  document.getElementById('apiKeyInput').value = '';
+  updateApiStatus('empty');
+  updateHeaderBtn();
+}
+
+function toggleApiVis() {
+  var inp = document.getElementById('apiKeyInput');
+  inp.type = (inp.type === 'password') ? 'text' : 'password';
+}
+
+function updateApiStatus(state) {
+  var el = document.getElementById('apiStatus');
+  var map = {
+    ok:      { color:'var(--green)', text:'Key guardada correctamente' },
+    invalid: { color:'var(--red)',   text:'Key invalida. Debe empezar con sk-ant-' },
+    empty:   { color:'var(--text-dim)', text:'Sin key — los analisis IA no funcionaran' },
+    saved:   { color:'var(--accent)', text:'Key configurada y lista' }
+  };
+  var s = map[state] || map.empty;
+  el.style.display = 'block';
+  el.style.color = s.color;
+  el.textContent = s.text;
+}
+
+function updateHeaderBtn() {
+  var btn = document.getElementById('btnSettings');
+  var k = getApiKey();
+  if (!k) {
+    btn.style.color = 'var(--red)';
+    btn.style.borderColor = 'rgba(255,90,90,0.4)';
+    btn.title = 'Configura tu API Key';
+  } else {
+    btn.style.color = 'var(--green)';
+    btn.style.borderColor = 'rgba(90,255,176,0.35)';
+    btn.title = 'API Key configurada';
+  }
+}
+
+function requireApiKey() {
+  var k = getApiKey();
+  if (!k) { openSettings(); return null; }
+  return k;
+}
+
 // ══════════════════════════════════════════
 // DATA
 // ══════════════════════════════════════════
@@ -1511,11 +1675,13 @@ async function analyzeGame(id) {
   const idxSummary = INDICES.map(i=>`${i.name}:${i.val}`).join(', ');
 
   try {
+    const apiKey = requireApiKey();
+    if (!apiKey) { spinner.classList.remove('show'); btn.disabled = false; return; }
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method:'POST',
-      headers:{'Content-Type':'application/json'},
+      headers:{'Content-Type':'application/json','x-api-key': apiKey,'anthropic-version':'2023-06-01'},
       body: JSON.stringify({
-        model:'claude-haiku-4-5-20251001',
+        model: getModel(),
         max_tokens:400,
         system: `Eres El Compatipster, asistente de análisis de béisbol para Manuldo Baseball 2026. 
 Responde en español. Sé conciso (máx 5 oraciones). Usa emojis ocasionalmente. 
@@ -1564,11 +1730,13 @@ async function analyzeParlay() {
   const picks = PARLAY_PICKS.map(p=>`${teamData(p.homeAbbr).name} (${p.pick} ${p.odds})`).join(' + ');
 
   try {
+    const apiKeyP = requireApiKey();
+    if (!apiKeyP) { spinner.classList.remove('show'); btn.disabled = false; return; }
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method:'POST',
-      headers:{'Content-Type':'application/json'},
+      headers:{'Content-Type':'application/json','x-api-key': apiKeyP,'anthropic-version':'2023-06-01'},
       body: JSON.stringify({
-        model:'claude-haiku-4-5-20251001',
+        model: getModel(),
         max_tokens:400,
         system:`Eres El Compatipster, experto en parlay de béisbol para Manuldo Baseball 2026. 
 Responde en español. Sé conciso (máx 6 oraciones). Evalúa correlaciones entre picks, riesgo total y probabilidad de éxito del parlay.`,
@@ -1604,12 +1772,36 @@ renderHistory();
 renderParlay();
 renderStats();
 
+// Wire settings button
+document.getElementById('btnSettings').addEventListener('click', openSettings);
+
+// API key header indicator
+updateHeaderBtn();
+
 // Refresh button animation
+document.getElementById('btnSettings').addEventListener('click', openSettings);
+
 document.getElementById('btnRefresh').addEventListener('click', function() {
   this.style.transform = 'rotate(360deg)';
   this.style.transition = 'transform 0.6s ease';
   setTimeout(()=>{ this.style.transform=''; this.style.transition=''; }, 700);
 });
+
+
+// Show API key indicator on header
+(function checkApiOnLoad(){
+  const k = getApiKey();
+  const btn = document.getElementById('btnSettings');
+  if (!k) {
+    btn.style.color = 'var(--red)';
+    btn.style.borderColor = 'rgba(255,90,90,0.4)';
+    btn.title = 'Configura tu API Key';
+  } else {
+    btn.style.color = 'var(--green)';
+    btn.style.borderColor = 'rgba(90,255,176,0.35)';
+    btn.title = 'API Key configurada';
+  }
+})();
 
 // Animate index bars on load
 setTimeout(() => {
